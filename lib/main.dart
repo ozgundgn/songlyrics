@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:songlyrics/views/songs/songs_view.dart';
+
+import 'constants/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +28,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
       home: const HomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        songsView: (context) => const SongsView(),
+      },
     );
   }
 }
@@ -124,7 +130,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () async {
                 final searchText = _textController.text;
                 Navigator.of(context).pushNamed(
-                  searchText,
+                  songsView,
                   arguments: searchText,
                 );
               },

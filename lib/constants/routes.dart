@@ -1,1 +1,1 @@
-const lyricsView = "/lyrics/lyrics_view";
+const songsView = "/lyrics/songs_view";
