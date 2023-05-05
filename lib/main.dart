@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:songlyrics/utilities/dialogs/cannot_search_empty_text.dart';
 import 'package:songlyrics/views/songs/songs_view.dart';
 
 import 'constants/routes.dart';
@@ -129,10 +130,14 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               onPressed: () async {
                 final searchText = _textController.text;
-                Navigator.of(context).pushNamed(
-                  songsView,
-                  arguments: searchText,
-                );
+                if (searchText.trim().isEmpty) {
+                  await showCannotSearchTextDialog(context);
+                } else {
+                  Navigator.of(context).pushNamed(
+                    songsView,
+                    arguments: searchText,
+                  );
+                }
               },
               child: const Text('Do it'),
             ),
