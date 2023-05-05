@@ -19,4 +19,14 @@ class GeniusService implements ApiProvider {
     var songList = hits.map<Song>((json) => Song.fromJson(json)).toList();
     return songList;
   }
+
+  @override
+  Future<String> getLyrics({required String url}) async {
+    final response = await http.get(Uri.parse(url));
+
+    var body = jsonDecode(response.body);
+    var hits = body["response"]["hits"];
+    var songList = hits.map<Song>((json) => Song.fromJson(json)).toList();
+    return songList;
+  }
 }
