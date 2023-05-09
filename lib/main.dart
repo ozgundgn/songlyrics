@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:songlyrics/utilities/dialogs/cannot_search_empty_text.dart';
+import 'package:songlyrics/views/songs/lyrics_view.dart';
 import 'package:songlyrics/views/songs/songs_view.dart';
 
 import 'constants/routes.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       home: const HomePage(title: 'Flutter Demo Home Page'),
       routes: {
         songsView: (context) => const SongsView(),
+        songLyricsView: (context) => const SongLyricsView()
       },
     );
   }

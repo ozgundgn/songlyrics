@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:songlyrics/constants/routes.dart';
 import 'package:songlyrics/services/api/abstract/api_provider.dart';
 import 'package:songlyrics/services/api/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
@@ -63,9 +64,15 @@ class _SongsViewState extends State<SongsView> {
             case ConnectionState.done:
               if (snapshot.hasData) {
                 final allSongs = snapshot.data as Iterable<Song>;
-                return SongsListView(songs: allSongs);
+                return SongsListView(
+                  songs: allSongs,
+                  onTap: (song) async {
+                    Navigator.of(context)
+                        .pushNamed(songLyricsView, arguments: song.url);
+                  },
+                );
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return const Text('Empty list');
               }
             default:
               return const Center(child: CircularProgressIndicator());
