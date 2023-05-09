@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:html/parser.dart';
 import 'package:songlyrics/models/song.dart';
 import 'package:songlyrics/services/api/abstract/api_provider.dart';
 import 'package:http/http.dart' as http;
@@ -23,10 +24,9 @@ class GeniusService implements ApiProvider {
   @override
   Future<String> getLyrics({required String url}) async {
     final response = await http.get(Uri.parse(url));
-
-    var body = jsonDecode(response.body);
-    var hits = body["response"]["hits"];
-    var songList = hits.map<Song>((json) => Song.fromJson(json)).toList();
-    return songList;
+    var document = parse(response.body);
+    // var body = parse(response.body);
+    var dd = document;
+    return "songList";
   }
 }

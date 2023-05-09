@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -32,8 +30,7 @@ class _SongLyricsViewState extends State<SongLyricsView> {
   }
 
   Future<String> getLyrics(BuildContext context) async {
-    var text = context.getArgument<String>();
-    url = text;
+    var url = context.getArgument<String>();
     var lyrics = await _apiProvider.getLyrics(url: url!);
     return lyrics;
   }

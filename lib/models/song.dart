@@ -4,22 +4,16 @@ class Song {
   final SongDetail result;
   final String type;
   final String index;
-  final String url;
 
-  Song(this.result, this.type, this.index, this.url);
+  Song(this.result, this.type, this.index);
 
   Song.fromJson(json)
       : result = SongDetail.fromJson(json['result']),
         type = json['type'],
-        index = json['index'],
-        url = json['url'];
+        index = json['index'];
 
-  Map<String, dynamic> toJson() => {
-        'result': result.toJson(),
-        'type': type,
-        'index': index,
-        'url': url,
-      };
+  Map<String, dynamic> toJson() =>
+      {'result': result.toJson(), 'type': type, 'index': index};
 }
 
 class SongDetail {

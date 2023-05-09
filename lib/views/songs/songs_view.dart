@@ -67,8 +67,8 @@ class _SongsViewState extends State<SongsView> {
                 return SongsListView(
                   songs: allSongs,
                   onTap: (song) async {
-                    Navigator.of(context)
-                        .pushNamed(songLyricsView, arguments: song.url);
+                    Navigator.of(context).pushNamed(songLyricsView,
+                        arguments: song.result.songUrl);
                   },
                 );
               } else {
