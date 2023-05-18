@@ -26,7 +26,13 @@ class GeniusService implements ApiProvider {
     final response = await http.get(Uri.parse(url));
     var document = parse(response.body);
     // var body = parse(response.body);
-    var dd = document;
-    return "songList";
+    var g = document.outerHtml;
+    var lyrics = document
+        .getElementsByTagName("div")
+        .where((el) => el.attributes["data-lyrics-container"] == "true")
+        .map((item) => item.outerHtml)
+        .toList();
+
+    return lyrics.join();
   }
 }

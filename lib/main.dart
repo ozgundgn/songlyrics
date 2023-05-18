@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Sofly',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.deepPurple,
       ),
-      home: const HomePage(title: 'Flutter Demo Home Page'),
+      home: const HomePage(title: 'Sofly'),
       routes: {
         songsView: (context) => const SongsView(),
         songLyricsView: (context) => const SongLyricsView()
@@ -57,7 +57,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _counter = 0;
   late final TextEditingController _textController;
 
   @override
@@ -70,17 +69,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _textController.dispose();
     super.dispose();
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
   }
 
   @override
@@ -117,7 +105,7 @@ class _HomePageState extends State<HomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text("Let's find song!"),
+            const Text("Şarkı bulalım!"),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: TextField(
@@ -125,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 decoration: const InputDecoration(
-                  hintText: 'Start typing...',
+                  hintText: 'Şarkının bir kısmı...',
                 ),
               ),
             ),
@@ -141,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
               },
-              child: const Text('Do it'),
+              child: const Text('Bul'),
             ),
 
             // Text(

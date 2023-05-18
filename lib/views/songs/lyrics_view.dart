@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:songlyrics/helpers/api_urls.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:songlyrics/services/api/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
 
@@ -41,23 +39,29 @@ class _SongLyricsViewState extends State<SongLyricsView> {
       appBar: AppBar(
         title: const Text('Şarkı Sözleri'),
       ),
-      body: FutureBuilder<String>(
-        future: getLyrics(context),
-        builder: ((context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-            case ConnectionState.active:
-            case ConnectionState.done:
-              if (snapshot.hasData) {
-                String lyrics = snapshot.data as String;
-                return Text(lyrics);
-              } else {
-                return const Text('Empty!');
+      body: Center(
+        child: SingleChildScrollView(
+          child: FutureBuilder<String>(
+            future: getLyrics(context),
+            builder: ((context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  if (snapshot.hasData) {
+                    String lyrics = snapshot.data as String;
+                    return Html(
+                      data: lyrics.replaceAll("<a", "<p"),
+                    );
+                  } else {
+                    return const Text('Empty!');
+                  }
+                case ConnectionState.waiting:
+                default:
+                  return const Center(child: CircularProgressIndicator());
               }
-            default:
-              return const Center(child: CircularProgressIndicator());
-          }
-        }),
+            }),
+          ),
+        ),
       ),
     );
   }

@@ -60,7 +60,6 @@ class _SongsViewState extends State<SongsView> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.active:
-            case ConnectionState.waiting:
             case ConnectionState.done:
               if (snapshot.hasData) {
                 final allSongs = snapshot.data as Iterable<Song>;
@@ -74,6 +73,7 @@ class _SongsViewState extends State<SongsView> {
               } else {
                 return const Text('Empty list');
               }
+            case ConnectionState.waiting:
             default:
               return const Center(child: CircularProgressIndicator());
           }
