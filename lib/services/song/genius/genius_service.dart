@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:html/parser.dart';
 import 'package:songlyrics/models/song.dart';
-import 'package:songlyrics/services/api/abstract/api_provider.dart';
+import 'package:songlyrics/services/song/abstract/song_provider.dart';
 import 'package:http/http.dart' as http;
 import '../../../helpers/api_urls.dart';
 
-class GeniusService implements ApiProvider {
+class GeniusService implements SongProvider {
   @override
   Future<Iterable<Song>> getSongsByLyrics({required String text}) async {
     final response =
@@ -25,8 +25,6 @@ class GeniusService implements ApiProvider {
   Future<String> getLyrics({required String url}) async {
     final response = await http.get(Uri.parse(url));
     var document = parse(response.body);
-    // var body = parse(response.body);
-    var g = document.outerHtml;
     var lyrics = document
         .getElementsByTagName("div")
         .where((el) => el.attributes["data-lyrics-container"] == "true")

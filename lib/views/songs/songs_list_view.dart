@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../models/song.dart';
 import 'package:share_plus/share_plus.dart';
+import 'bloc/song_bloc.dart';
+import 'bloc/song_state.dart';
 
 typedef SongsCallback = void Function(Song song);
 
@@ -12,32 +15,36 @@ class SongsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: songs.length,
-      itemBuilder: (context, index) {
-        final song = songs.elementAt(index);
-        return ListTile(
-          onTap: () {
-            onTap(song);
+    return BlocBuilder<SongBloc, SongState>(
+      builder: (context, state) {
+        return ListView.builder(
+          itemCount: songs.length,
+          itemBuilder: (context, index) {
+            final song = songs.elementAt(index);
+            return ListTile(
+              onTap: () {
+                onTap(song);
+              },
+              title: Text(
+                song.result.title,
+                maxLines: 1,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+              subtitle: Text(
+                song.result.artistName,
+                maxLines: 1,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: IconButton(
+                icon: const Icon(Icons.share),
+                onPressed: () async {
+                  Share.share(song.result.title);
+                },
+              ),
+            );
           },
-          title: Text(
-            song.result.title,
-            maxLines: 1,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Text(
-            song.result.artistName,
-            maxLines: 1,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: () async {
-              Share.share(song.result.title);
-            },
-          ),
         );
       },
     );

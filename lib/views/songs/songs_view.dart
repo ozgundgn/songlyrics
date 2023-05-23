@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:songlyrics/constants/routes.dart';
-import 'package:songlyrics/services/api/abstract/api_provider.dart';
-import 'package:songlyrics/services/api/genius/genius_service.dart';
-import 'package:songlyrics/utilities/get_arguments.dart';
 import 'package:songlyrics/views/songs/songs_list_view.dart';
 import '../../models/song.dart';
+import 'bloc/song_bloc.dart';
+import 'bloc/song_event.dart';
+import 'bloc/song_state.dart';
 
 extension Count<T extends Iterable> on Stream<T> {
   Stream<int> get getLength => map(((t) => t.length));
@@ -18,67 +19,43 @@ class SongsView extends StatefulWidget {
 }
 
 class _SongsViewState extends State<SongsView> {
-  late final ApiProvider _apiProvider;
-  String? _searchingText = "";
-  @override
-  void initState() {
-    _apiProvider = GeniusService();
-    super.initState();
-  }
+  Iterable<Song>? _songList;
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Future<Iterable<Song>> getText(BuildContext context) async {
-    var text = context.getArgument<String>();
-    _searchingText = text;
-    var list = await _apiProvider.getSongsByLyrics(text: text!);
-    return list;
-  }
+  // Future<Iterable<Song>> getText(BuildContext context) async {
+  //   var text = context.getArgument<String>();
+  //   _searchingText = text;
+  //   var list = await _apiProvider.getSongsByLyrics(text: text!);
+  //   return list;
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: FutureBuilder(
-          future: getText(context),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final soundCount = snapshot.data!.length;
-              String text = '$soundCount şarkı bulundu!';
-              return Text(text);
-            } else {
-              return const Text('Şarkı bulunamadı!');
-            }
-          },
-        ),
-      ),
-      body: FutureBuilder<Iterable<Song>>(
-        future: _apiProvider.getSongsByLyrics(text: _searchingText!),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.active:
-            case ConnectionState.done:
-              if (snapshot.hasData) {
-                final allSongs = snapshot.data as Iterable<Song>;
-                return SongsListView(
-                  songs: allSongs,
-                  onTap: (song) async {
-                    Navigator.of(context).pushNamed(songLyricsView,
-                        arguments: song.result.songUrl);
-                  },
-                );
-              } else {
-                return const Text('Empty list');
-              }
-            case ConnectionState.waiting:
-            default:
-              return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
+    return BlocBuilder<SongBloc, SongState>(
+      builder: (context, state) {
+        if (state is SongStateFound) {
+          _songList = state.list;
+        }
+        return Scaffold(
+            appBar: AppBar(
+              title: _songList != null
+                  ? Text("${_songList?.length}" + " şarkı bulundu")
+                  : const Text("Şarkı bulunamadı"),
+              leading: BackButton(
+                onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                    searchView, (Route<dynamic> route) => true),
+              ),
+            ),
+            body: SongsListView(
+              songs: _songList!,
+              onTap: (song) async {
+                Navigator.of(context)
+                    .pushNamed(songLyricsView, arguments: song.result.songUrl);
+                // context.read<SongBloc>().add(
+                //       SongEventLyricsSearching(song.result.songUrl),
+                //     );
+              },
+            ));
+      },
     );
   }
 }

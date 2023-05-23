@@ -1,5 +1,3 @@
-import 'package:http/http.dart';
-
 class Song {
   final SongDetail result;
   final String type;

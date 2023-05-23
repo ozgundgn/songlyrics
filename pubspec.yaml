@@ -41,6 +41,8 @@ dependencies:
   share_plus: ^6.3.4
   html: ^0.15.3
   flutter_html: ^3.0.0-alpha.6
+  flutter_bloc: ^8.1.2
+  bloc: ^8.1.1
 
 dev_dependencies:
   flutter_test:

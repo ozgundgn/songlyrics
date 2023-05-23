@@ -1,55 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:songlyrics/utilities/dialogs/cannot_search_empty_text.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:songlyrics/services/song/genius/genius_service.dart';
+import 'package:songlyrics/views/songs/bloc/song_bloc.dart';
+import 'package:songlyrics/views/songs/bloc/song_event.dart';
+import 'package:songlyrics/views/songs/bloc/song_state.dart';
 import 'package:songlyrics/views/songs/lyrics_view.dart';
+import 'package:songlyrics/views/songs/search.dart';
 import 'package:songlyrics/views/songs/songs_view.dart';
 
 import 'constants/routes.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sofly',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.deepPurple,
+  runApp(
+    BlocProvider(
+      create: (context) => SongBloc(GeniusService()),
+      child: MaterialApp(
+        //dil eklenecek
+        title: 'Sofly',
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+        ),
+        home: const HomePage(title: 'Sofly'),
+        routes: {
+          searchView: ((context) => const SearchView()),
+          songsView: (context) => const SongsView(),
+          songLyricsView: (context) => const SongLyricsView()
+        },
       ),
-      home: const HomePage(title: 'Sofly'),
-      routes: {
-        songsView: (context) => const SongsView(),
-        songLyricsView: (context) => const SongLyricsView()
-      },
-    );
-  }
+    ),
+  );
 }
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -57,94 +40,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final TextEditingController _textController;
-
   @override
   void initState() {
-    _textController = TextEditingController();
     super.initState();
   }
 
   @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the HomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text("Şarkı bulalım!"),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: TextField(
-                controller: _textController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: 'Şarkının bir kısmı...',
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () async {
-                final searchText = _textController.text;
-                if (searchText.trim().isEmpty) {
-                  await showCannotSearchTextDialog(context);
-                } else {
-                  Navigator.of(context).pushNamed(
-                    songsView,
-                    arguments: searchText,
-                  );
-                }
-              },
-              child: const Text('Bul'),
-            ),
-
-            // Text(
-            //   '$_counter',
-            //   style: Theme.of(context).textTheme.headline4,
-            // ),
-          ],
-        ),
-      ),
-      //   floatingActionButton: FloatingActionButton(
-      //     onPressed: _incrementCounter,
-      //     tooltip: 'Increment',
-      //     child: const Icon(Icons.add),
-      //   ), // This trailing comma makes auto-formatting nicer for build methods.
-      //
+    context.read<SongBloc>().add(const SongEventInitialize());
+    return BlocConsumer<SongBloc, SongState>(
+      listener: (context, state) {
+        if (state.isLoading) {
+          //Loading screen
+        } else {
+          //hide;
+        }
+      },
+      builder: (context, state) {
+        if (state is SongStateFound) {
+          return const SongsView();
+          // } else if (state is SongStateLyricsFound) {
+          //   return const SongLyricsView();
+        } else {
+          return const SearchView();
+        }
+      },
     );
   }
 }

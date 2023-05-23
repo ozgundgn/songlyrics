@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:songlyrics/services/api/genius/genius_service.dart';
+import 'package:songlyrics/constants/routes.dart';
+import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
-
-import '../../services/api/abstract/api_provider.dart';
+import '../../services/song/abstract/song_provider.dart';
+import 'bloc/song_bloc.dart';
+import 'bloc/song_state.dart';
 
 class SongLyricsView extends StatefulWidget {
   const SongLyricsView({super.key});
@@ -13,9 +16,8 @@ class SongLyricsView extends StatefulWidget {
 }
 
 class _SongLyricsViewState extends State<SongLyricsView> {
-  late final ApiProvider _apiProvider;
-  String? url = "";
-
+  late GeniusService _apiProvider;
+  late String _songLyrics = "";
   @override
   void initState() {
     _apiProvider = GeniusService();
@@ -38,30 +40,32 @@ class _SongLyricsViewState extends State<SongLyricsView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Şarkı Sözleri'),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: FutureBuilder<String>(
-            future: getLyrics(context),
-            builder: ((context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.active:
-                case ConnectionState.done:
-                  if (snapshot.hasData) {
-                    String lyrics = snapshot.data as String;
-                    return Html(
-                      data: lyrics.replaceAll("<a", "<p"),
-                    );
-                  } else {
-                    return const Text('Empty!');
-                  }
-                case ConnectionState.waiting:
-                default:
-                  return const Center(child: CircularProgressIndicator());
-              }
-            }),
-          ),
+        leading: BackButton(
+          onPressed: () => Navigator.of(context).pop(songsView),
         ),
+      ),
+      body: FutureBuilder<String>(
+        future: getLyrics(context),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return const Center(child: CircularProgressIndicator());
+            case ConnectionState.active:
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                return Center(
+                  child: SingleChildScrollView(
+                    child: Html(
+                      data: snapshot.data?.replaceAll("<a", "<p"),
+                    ),
+                  ),
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+          }
+        },
       ),
     );
   }
