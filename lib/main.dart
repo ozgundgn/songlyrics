@@ -59,8 +59,6 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         if (state is SongStateFound) {
           return const SongsView();
-          // } else if (state is SongStateLyricsFound) {
-          //   return const SongLyricsView();
         } else {
           return const SearchView();
         }

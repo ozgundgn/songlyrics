@@ -14,12 +14,12 @@ class SongBloc extends Bloc<SongEvent, SongState> {
       emit(const SongStateSearching(exception: null, isLoading: true));
       final text = event.searchText;
       if (text == null) {
-        return;
+        emit(const SongStateSearching(exception: null, isLoading: false));
       }
       Exception? exception;
       Iterable<Song>? list;
       try {
-        list = await provider.getSongsByLyrics(text: text);
+        list = await provider.getSongsByLyrics(text: text!);
         exception = null;
       } on Exception catch (e) {
         exception = e;
@@ -36,10 +36,15 @@ class SongBloc extends Bloc<SongEvent, SongState> {
         emit(const SongStateLyricsSearching(exception: null, isLoading: true));
 
         final songUrl = event.url;
+
+        if (songUrl == null) {
+          emit(const SongStateInitialize(isLoading: false));
+          return;
+        }
         Exception? exception;
         String lyrics = "";
         try {
-          lyrics = await provider.getLyrics(url: songUrl!);
+          lyrics = await provider.getLyrics(url: songUrl);
           exception = null;
         } on Exception catch (e) {
           exception = e;

@@ -38,11 +38,11 @@ class _SongsViewState extends State<SongsView> {
         return Scaffold(
             appBar: AppBar(
               title: _songList != null
-                  ? Text("${_songList?.length}" + " şarkı bulundu")
+                  ? Text("${_songList?.length} şarkı bulundu")
                   : const Text("Şarkı bulunamadı"),
               leading: BackButton(
-                onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                    searchView, (Route<dynamic> route) => true),
+                onPressed: () =>
+                    context.read<SongBloc>().add(const SongEventInitialize()),
               ),
             ),
             body: SongsListView(

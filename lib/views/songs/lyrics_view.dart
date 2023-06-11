@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:songlyrics/constants/routes.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
-import '../../services/song/abstract/song_provider.dart';
-import 'bloc/song_bloc.dart';
-import 'bloc/song_state.dart';
 
 class SongLyricsView extends StatefulWidget {
   const SongLyricsView({super.key});
@@ -17,7 +12,6 @@ class SongLyricsView extends StatefulWidget {
 
 class _SongLyricsViewState extends State<SongLyricsView> {
   late GeniusService _apiProvider;
-  late String _songLyrics = "";
   @override
   void initState() {
     _apiProvider = GeniusService();
@@ -40,9 +34,6 @@ class _SongLyricsViewState extends State<SongLyricsView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Şarkı Sözleri'),
-        leading: BackButton(
-          onPressed: () => Navigator.of(context).pop(songsView),
-        ),
       ),
       body: FutureBuilder<String>(
         future: getLyrics(context),
