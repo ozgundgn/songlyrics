@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import '../../utilities/dialogs/cannot_search_empty_text.dart';
 import '../../services/song/bloc/song_bloc.dart';
 import '../../services/song/bloc/song_event.dart';
@@ -39,7 +40,7 @@ class _SearchViewState extends State<SearchView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text("Şarkı bulalım!"),
+                Text(context.loc.song_find),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: TextField(
@@ -47,7 +48,7 @@ class _SearchViewState extends State<SearchView> {
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     decoration: const InputDecoration(
-                      hintText: 'Şarkının bir kısmı...',
+                      hintText: "",
                     ),
                   ),
                 ),
@@ -66,7 +67,7 @@ class _SearchViewState extends State<SearchView> {
                           );
                     }
                   },
-                  child: const Text('Bul'),
+                  child: Text(context.loc.find_button_text),
                 ),
               ],
             ),

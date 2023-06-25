@@ -1,0 +1,28 @@
+{
+    "my_title":"Sofly (TR)",
+    "songs_title":"{count, plural, =0{Şarkı bulunamadı} other{{count} şarkı bulundu}}",
+    "@songs_title":{
+        "placeholders":{
+            "count":{
+                "type":"int",
+                "example":"3 şarkı"
+            }
+        }
+    },
+    "song_lyrics":"{singer} - {song} Sözleri",
+    "@song_lyrics":{
+        "placeholders":{
+            "singer":{
+                "type":"String",
+                "example":"Seda Sayan"
+            },
+            "song":{
+                "type":"String",
+                "example":"Evleneceksen Gel"
+            }
+        }
+    },
+    "song_find":"Şarkı bulalım!",
+    "input_search_text":"Şarkının bir kısmı...",
+    "find_button_text":"Bul"
+}

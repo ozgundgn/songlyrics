@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/helpers/loading/loading_screen.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/services/song/bloc/song_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:songlyrics/services/song/bloc/song_state.dart';
 import 'package:songlyrics/views/songs/lyrics_view.dart';
 import 'package:songlyrics/views/songs/search.dart';
 import 'package:songlyrics/views/songs/songs_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'constants/routes.dart';
 
@@ -17,7 +20,11 @@ void main() {
       create: (context) => SongBloc(GeniusService()),
       child: MaterialApp(
         //dil eklenecek
-        title: 'Sofly',
+        onGenerateTitle: (context) => context.loc.my_title,
+        // title: 'Sofly',
+        localizationsDelegates: AppLocalizations
+            .localizationsDelegates, //(dil desteği için)yukarda verdiğimiz yolda zaten konumlar tanımlı old. için kendimiz bir liste üretmemeliyiz.,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),

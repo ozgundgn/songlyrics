@@ -1,0 +1,28 @@
+{
+    "my_title":"Sofly (EN)",
+    "songs_title":"{count, plural, =0{No songs found} =1{1 song} other{{count} songs found}}",
+    "@songs_title":{
+        "placeholders":{
+            "count":{
+                "type":"int",
+                "example":"3 songs"
+            }
+        }
+    },
+    "song_lyrics":"{singer} - {song} Lyrics",
+    "@song_lyrics":{
+        "placeholders":{
+            "singer":{
+                "type":"String",
+                "example":"Lady Gaga"
+            },
+            "song":{
+                "type":"String",
+                "example":"Million Reasons"
+            }
+        }
+    },
+    "song_find":"Let's find song!",
+    "input_search_text":"Part of the song...",
+    "find_button_text":"Find"
+}

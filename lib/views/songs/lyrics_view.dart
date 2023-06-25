@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
 
@@ -23,9 +24,12 @@ class _SongLyricsViewState extends State<SongLyricsView> {
     super.dispose();
   }
 
+  Deneme? _deneme;
   Future<String> getLyrics(BuildContext context) async {
     var url = context.getArgument<String>();
     var lyrics = await _apiProvider.getLyrics(url: url!);
+
+    _deneme = context.getArgument<Deneme>();
     return lyrics;
   }
 
@@ -33,7 +37,10 @@ class _SongLyricsViewState extends State<SongLyricsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Şarkı Sözleri'),
+        title: Text(context.loc.song_lyrics(
+          _deneme?.singer ?? "",
+          _deneme?.song ?? "",
+        )),
       ),
       body: FutureBuilder<String>(
         future: getLyrics(context),
@@ -60,4 +67,12 @@ class _SongLyricsViewState extends State<SongLyricsView> {
       ),
     );
   }
+}
+
+class Deneme {
+  final String url;
+  final String singer;
+  final String song;
+
+  Deneme(this.url, this.singer, this.song);
 }

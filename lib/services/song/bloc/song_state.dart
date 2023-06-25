@@ -7,8 +7,7 @@ abstract class SongState {
   final bool isLoading;
   final String? loadingText;
   const SongState(
-      {required this.isLoading,
-      this.loadingText = "Lütfen bir kaç saniye bekleyin"});
+      {required this.isLoading, this.loadingText = "Lütfen biraz bekleyin"});
 }
 
 class SongStateInitialize extends SongState {
