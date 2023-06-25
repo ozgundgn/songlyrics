@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../utilities/dialogs/cannot_search_empty_text.dart';
-import 'bloc/song_bloc.dart';
-import 'bloc/song_event.dart';
-import 'bloc/song_state.dart';
+import '../../services/song/bloc/song_bloc.dart';
+import '../../services/song/bloc/song_event.dart';
+import '../../services/song/bloc/song_state.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../models/song.dart';
 import 'package:share_plus/share_plus.dart';
-import 'bloc/song_bloc.dart';
-import 'bloc/song_state.dart';
+import '../../services/song/bloc/song_bloc.dart';
+import '../../services/song/bloc/song_state.dart';
 
 typedef SongsCallback = void Function(Song song);
 

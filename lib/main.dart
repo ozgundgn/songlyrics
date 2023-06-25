@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:songlyrics/helpers/loading/loading_screen.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
-import 'package:songlyrics/views/songs/bloc/song_bloc.dart';
-import 'package:songlyrics/views/songs/bloc/song_event.dart';
-import 'package:songlyrics/views/songs/bloc/song_state.dart';
+import 'package:songlyrics/services/song/bloc/song_bloc.dart';
+import 'package:songlyrics/services/song/bloc/song_event.dart';
+import 'package:songlyrics/services/song/bloc/song_state.dart';
 import 'package:songlyrics/views/songs/lyrics_view.dart';
 import 'package:songlyrics/views/songs/search.dart';
 import 'package:songlyrics/views/songs/songs_view.dart';
@@ -51,9 +52,12 @@ class _HomePageState extends State<HomePage> {
     return BlocConsumer<SongBloc, SongState>(
       listener: (context, state) {
         if (state.isLoading) {
-          //Loading screen
+          LoadingScreen().show(
+            context: context,
+            text: state.loadingText!,
+          );
         } else {
-          //hide;
+          LoadingScreen().hide();
         }
       },
       builder: (context, state) {

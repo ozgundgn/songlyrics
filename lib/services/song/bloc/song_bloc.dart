@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:songlyrics/views/songs/bloc/song_event.dart';
-import 'package:songlyrics/views/songs/bloc/song_state.dart';
+import 'package:songlyrics/services/song/bloc/song_event.dart';
+import 'package:songlyrics/services/song/bloc/song_state.dart';
 import '../../../models/song.dart';
-import '../../../services/song/abstract/song_provider.dart';
+import '../abstract/song_provider.dart';
 
 class SongBloc extends Bloc<SongEvent, SongState> {
   SongBloc(SongProvider provider)
