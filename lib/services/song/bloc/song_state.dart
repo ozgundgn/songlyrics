@@ -6,8 +6,10 @@ import '../../../models/song.dart';
 abstract class SongState {
   final bool isLoading;
   final String? loadingText;
-  const SongState(
-      {required this.isLoading, this.loadingText = "Lütfen biraz bekleyin"});
+  const SongState({
+    required this.isLoading,
+    this.loadingText = "Please wait",
+  });
 }
 
 class SongStateInitialize extends SongState {
@@ -19,6 +21,7 @@ class SongStateSearching extends SongState {
   const SongStateSearching({
     required this.exception,
     required super.isLoading,
+    super.loadingText,
   });
 }
 
@@ -31,8 +34,10 @@ class SongStateFound extends SongState {
 
 class SongStateLyricsSearching extends SongState {
   final Exception? exception;
-  const SongStateLyricsSearching(
-      {required this.exception, required super.isLoading});
+  const SongStateLyricsSearching({
+    required this.exception,
+    required super.isLoading,
+  });
 }
 
 class SongStateLyricsFound extends SongState {

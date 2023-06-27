@@ -34,7 +34,7 @@ class _SearchViewState extends State<SearchView> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Sofly"),
+            title: Text(context.loc.my_title),
           ),
           body: Center(
             child: Column(
@@ -47,8 +47,8 @@ class _SearchViewState extends State<SearchView> {
                     controller: _textController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    decoration: const InputDecoration(
-                      hintText: "",
+                    decoration: InputDecoration(
+                      hintText: context.loc.input_search_text,
                     ),
                   ),
                 ),
@@ -63,7 +63,10 @@ class _SearchViewState extends State<SearchView> {
                       //   arguments: searchText,
                       // );
                       context.read<SongBloc>().add(
-                            SongEventSongSearching(searchText),
+                            SongEventSongSearching(
+                              searchText,
+                              context.loc.waiting_text,
+                            ),
                           );
                     }
                   },

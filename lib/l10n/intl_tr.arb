@@ -1,5 +1,5 @@
 {
-    "my_title":"Sofly (TR)",
+    "my_title":"Sofly",
     "songs_title":"{count, plural, =0{Şarkı bulunamadı} other{{count} şarkı bulundu}}",
     "@songs_title":{
         "placeholders":{
@@ -24,5 +24,6 @@
     },
     "song_find":"Şarkı bulalım!",
     "input_search_text":"Şarkının bir kısmı...",
-    "find_button_text":"Bul"
+    "find_button_text":"Bul",
+    "waiting_text":"Lüften biraz bekleyin"
 }

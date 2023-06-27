@@ -11,7 +11,11 @@ class SongBloc extends Bloc<SongEvent, SongState> {
         {emit(const SongStateSearching(isLoading: false, exception: null))});
 
     on<SongEventSongSearching>((event, emit) async {
-      emit(const SongStateSearching(exception: null, isLoading: true));
+      emit(SongStateSearching(
+        exception: null,
+        isLoading: true,
+        loadingText: event.loadingText,
+      ));
       final text = event.searchText;
       if (text == null) {
         emit(const SongStateSearching(exception: null, isLoading: false));
@@ -33,7 +37,10 @@ class SongBloc extends Bloc<SongEvent, SongState> {
 
     on<SongEventLyricsSearching>(
       (event, emit) async {
-        emit(const SongStateLyricsSearching(exception: null, isLoading: true));
+        emit(const SongStateLyricsSearching(
+          exception: null,
+          isLoading: true,
+        ));
 
         final songUrl = event.url;
 

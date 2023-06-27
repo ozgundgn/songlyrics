@@ -40,7 +40,7 @@ class SongsListView extends StatelessWidget {
               trailing: IconButton(
                 icon: const Icon(Icons.share),
                 onPressed: () async {
-                  Share.share(song.result.title);
+                  Share.share(song.result.songUrl);
                 },
               ),
             );

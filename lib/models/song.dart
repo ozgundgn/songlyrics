@@ -41,3 +41,11 @@ class SongDetail {
         'title': title
       };
 }
+
+class LyricsInfoModel {
+  final String url;
+  final String singer;
+  final String song;
+  String? lyrics;
+  LyricsInfoModel(this.url, this.singer, this.song, this.lyrics);
+}

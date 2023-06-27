@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
+
+import '../../models/song.dart';
 
 class SongLyricsView extends StatefulWidget {
   const SongLyricsView({super.key});
@@ -24,25 +25,20 @@ class _SongLyricsViewState extends State<SongLyricsView> {
     super.dispose();
   }
 
-  Deneme? _deneme;
-  Future<String> getLyrics(BuildContext context) async {
-    var url = context.getArgument<String>();
-    var lyrics = await _apiProvider.getLyrics(url: url!);
-
-    _deneme = context.getArgument<Deneme>();
-    return lyrics;
+  Future<LyricsInfoModel?> getLyrics(BuildContext context) async {
+    var lyricsInfoModel = context.getArgument<LyricsInfoModel>();
+    if (lyricsInfoModel != null) {
+      var lyrics = await _apiProvider.getLyrics(url: lyricsInfoModel.url);
+      lyricsInfoModel.lyrics = lyrics;
+    }
+    return lyricsInfoModel;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.loc.song_lyrics(
-          _deneme?.singer ?? "",
-          _deneme?.song ?? "",
-        )),
-      ),
-      body: FutureBuilder<String>(
+      appBar: AppBar(),
+      body: FutureBuilder<LyricsInfoModel?>(
         future: getLyrics(context),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
@@ -55,7 +51,8 @@ class _SongLyricsViewState extends State<SongLyricsView> {
                 return Center(
                   child: SingleChildScrollView(
                     child: Html(
-                      data: snapshot.data?.replaceAll("<a", "<p"),
+                      data:
+                          "<b>${snapshot.data!.singer} - ${snapshot.data!.song}</b><br><br>${snapshot.data!.lyrics?.replaceAll("<a", "<p")}",
                     ),
                   ),
                 );
@@ -67,12 +64,4 @@ class _SongLyricsViewState extends State<SongLyricsView> {
       ),
     );
   }
-}
-
-class Deneme {
-  final String url;
-  final String singer;
-  final String song;
-
-  Deneme(this.url, this.singer, this.song);
 }

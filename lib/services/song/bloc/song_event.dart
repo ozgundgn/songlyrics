@@ -11,10 +11,12 @@ class SongEventInitialize extends SongEvent {
 
 class SongEventSongSearching extends SongEvent {
   final String? searchText;
-  const SongEventSongSearching(this.searchText);
+  final String? loadingText;
+  const SongEventSongSearching(this.searchText, this.loadingText);
 }
 
 class SongEventLyricsSearching extends SongEvent {
   final String? url;
-  const SongEventLyricsSearching(this.url);
+  final String? loadingText;
+  const SongEventLyricsSearching(this.url, this.loadingText);
 }

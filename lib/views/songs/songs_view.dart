@@ -49,11 +49,8 @@ class _SongsViewState extends State<SongsView> {
               songs: _songList!,
               onTap: (song) async {
                 Navigator.of(context).pushNamed(songLyricsView,
-                    arguments: Deneme(
-                      song.result.songUrl,
-                      song.result.artistName,
-                      song.result.title,
-                    ));
+                    arguments: LyricsInfoModel(song.result.songUrl,
+                        song.result.artistName, song.result.title, null));
                 // context.read<SongBloc>().add(
                 //       SongEventLyricsSearching(song.result.songUrl),
                 //     );
