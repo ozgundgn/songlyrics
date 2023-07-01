@@ -10,10 +10,11 @@ import 'package:songlyrics/views/songs/lyrics_view.dart';
 import 'package:songlyrics/views/songs/search.dart';
 import 'package:songlyrics/views/songs/songs_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'constants/routes.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     BlocProvider(
       create: (context) => SongBloc(GeniusService()),
@@ -25,9 +26,14 @@ void main() {
             .localizationsDelegates, //(dil desteği için)yukarda verdiğimiz yolda zaten konumlar tanımlı old. için kendimiz bir liste üretmemeliyiz.,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
+          textTheme: GoogleFonts.montserratTextTheme().copyWith(
+            bodyMedium: GoogleFonts.oswald(),
+          ),
+          primarySwatch: Colors.purple,
         ),
+        themeMode: ThemeMode.dark,
         home: const HomePage(title: 'Sofly'),
+
         routes: {
           searchView: ((context) => const SearchView()),
           songsView: (context) => const SongsView(),
@@ -41,6 +47,7 @@ void main() {
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
   final String title;
+  // Modify this line
 
   @override
   State<HomePage> createState() => _HomePageState();

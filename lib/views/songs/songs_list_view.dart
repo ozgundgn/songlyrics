@@ -21,29 +21,35 @@ class SongsListView extends StatelessWidget {
           itemCount: songs.length,
           itemBuilder: (context, index) {
             final song = songs.elementAt(index);
-            return ListTile(
-              onTap: () {
-                onTap(song);
-              },
-              title: Text(
-                song.result.title,
-                maxLines: 1,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-              ),
-              subtitle: Text(
-                song.result.artistName,
-                maxLines: 1,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-              ),
-              trailing: IconButton(
-                icon: const Icon(Icons.share),
-                onPressed: () async {
-                  Share.share(song.result.songUrl);
-                },
-              ),
-            );
+            return MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: SizedBox(
+                  width: 200,
+                  child: ListTile(
+                    onTap: () {
+                      onTap(song);
+                    },
+                    mouseCursor: SystemMouseCursors.click,
+                    title: Text(
+                      song.result.title,
+                      maxLines: 1,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(
+                      song.result.artistName,
+                      maxLines: 1,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.share),
+                      onPressed: () async {
+                        Share.share(song.result.songUrl);
+                      },
+                    ),
+                  ),
+                ));
           },
         );
       },
