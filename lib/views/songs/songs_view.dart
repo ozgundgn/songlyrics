@@ -7,7 +7,6 @@ import '../../models/song.dart';
 import '../../services/song/bloc/song_bloc.dart';
 import '../../services/song/bloc/song_event.dart';
 import '../../services/song/bloc/song_state.dart';
-import 'lyrics_view.dart';
 
 extension Count<T extends Iterable> on Stream<T> {
   Stream<int> get getLength => map(((t) => t.length));

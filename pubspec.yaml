@@ -46,7 +46,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
-  google_fonts: ^4.0.4
+  flutter_launcher_icons: ^0.12.0
 
 dev_dependencies:
   flutter_test:

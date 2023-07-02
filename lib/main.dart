@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/helpers/loading/loading_screen.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
@@ -11,7 +12,6 @@ import 'package:songlyrics/views/songs/search.dart';
 import 'package:songlyrics/views/songs/songs_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'constants/routes.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,9 +26,9 @@ void main() {
             .localizationsDelegates, //(dil desteği için)yukarda verdiğimiz yolda zaten konumlar tanımlı old. için kendimiz bir liste üretmemeliyiz.,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
-          textTheme: GoogleFonts.montserratTextTheme().copyWith(
-            bodyMedium: GoogleFonts.oswald(),
-          ),
+          // textTheme: GoogleFonts.montserratTextTheme().copyWith(
+          //   bodyMedium: GoogleFonts.oswald(),
+          // ),
           primarySwatch: Colors.purple,
         ),
         themeMode: ThemeMode.dark,

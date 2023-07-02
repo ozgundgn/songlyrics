@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import '../../utilities/dialogs/cannot_search_empty_text.dart';
 import '../../services/song/bloc/song_bloc.dart';
@@ -43,7 +42,7 @@ class _SearchViewState extends State<SearchView> {
               children: <Widget>[
                 Text(
                   context.loc.song_find,
-                  style: GoogleFonts.montserrat(),
+                  // style: GoogleFonts.montserrat(),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -97,7 +96,7 @@ class _SearchViewState extends State<SearchView> {
                         },
                         child: Text(
                           context.loc.find_button_text,
-                          style: GoogleFonts.montserrat(fontSize: 17),
+                          // style: GoogleFonts.montserrat(fontSize: 17),
                         ),
                       ),
                     ],
