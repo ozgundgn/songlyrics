@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:songlyrics/constants/routes.dart';
 import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/views/songs/songs_list_view.dart';
+import '../../models/genius/geniussong.dart';
 import '../../models/song.dart';
 import '../../services/song/bloc/song_bloc.dart';
 import '../../services/song/bloc/song_event.dart';
@@ -48,8 +49,8 @@ class _SongsViewState extends State<SongsView> {
               songs: _songList!,
               onTap: (song) async {
                 Navigator.of(context).pushNamed(songLyricsView,
-                    arguments: LyricsInfoModel(song.result.songUrl,
-                        song.result.artistName, song.result.title, null));
+                    arguments:
+                        LyricsInfoModel(song.artistName, song.songName, null));
                 // context.read<SongBloc>().add(
                 //       SongEventLyricsSearching(song.result.songUrl),
                 //     );

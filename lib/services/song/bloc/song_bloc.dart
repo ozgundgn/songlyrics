@@ -2,10 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:songlyrics/services/song/bloc/song_event.dart';
 import 'package:songlyrics/services/song/bloc/song_state.dart';
 import '../../../models/song.dart';
+import '../abstract/lyrics_provider.dart';
 import '../abstract/song_provider.dart';
 
 class SongBloc extends Bloc<SongEvent, SongState> {
-  SongBloc(SongProvider provider)
+  SongBloc(SongProvider songProvider, LyricsProvider lyricsProvider)
       : super(const SongStateInitialize(isLoading: false)) {
     on<SongEventInitialize>((event, emit) =>
         {emit(const SongStateSearching(isLoading: false, exception: null))});
@@ -23,7 +24,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
       Exception? exception;
       Iterable<Song>? list;
       try {
-        list = await provider.getSongsByLyrics(text: text!);
+        list = await songProvider.getSongsByLyrics(text: text!);
         exception = null;
       } on Exception catch (e) {
         exception = e;
@@ -51,7 +52,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
         Exception? exception;
         String lyrics = "";
         try {
-          lyrics = await provider.getLyrics(url: songUrl);
+          lyrics = await lyricsProvider.getLyrics(songUrl);
           exception = null;
         } on Exception catch (e) {
           exception = e;

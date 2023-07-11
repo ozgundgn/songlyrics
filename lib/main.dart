@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:google_fonts/google_fonts.dart';
 import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/helpers/loading/loading_screen.dart';
-import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/services/song/bloc/song_bloc.dart';
 import 'package:songlyrics/services/song/bloc/song_event.dart';
 import 'package:songlyrics/services/song/bloc/song_state.dart';
+import 'package:songlyrics/services/song/genius/genius_service.dart';
+import 'package:songlyrics/services/song/spotify/spotify_service.dart';
 import 'package:songlyrics/views/songs/lyrics_view.dart';
 import 'package:songlyrics/views/songs/search.dart';
 import 'package:songlyrics/views/songs/songs_view.dart';
@@ -17,7 +17,10 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     BlocProvider(
-      create: (context) => SongBloc(GeniusService()),
+      create: (context) => SongBloc(
+        SpotifyService(),
+        GeniusService(),
+      ),
       child: MaterialApp(
         //dil eklenecek
         onGenerateTitle: (context) => context.loc.my_title,

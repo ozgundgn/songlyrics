@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../models/song.dart';
 import 'package:share_plus/share_plus.dart';
+import '../../models/song.dart';
 import '../../services/song/bloc/song_bloc.dart';
 import '../../services/song/bloc/song_state.dart';
 
@@ -31,13 +31,13 @@ class SongsListView extends StatelessWidget {
                     },
                     mouseCursor: SystemMouseCursors.click,
                     title: Text(
-                      song.result.title,
+                      song.songName,
                       maxLines: 1,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                     ),
                     subtitle: Text(
-                      song.result.artistName,
+                      song.artistName,
                       maxLines: 1,
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
@@ -45,7 +45,7 @@ class SongsListView extends StatelessWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.share),
                       onPressed: () async {
-                        Share.share(song.result.songUrl);
+                        Share.share(song.url!);
                       },
                     ),
                   ),

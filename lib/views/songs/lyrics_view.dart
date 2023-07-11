@@ -3,7 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
 
-import '../../models/song.dart';
+import '../../models/genius/geniussong.dart';
 
 class SongLyricsView extends StatefulWidget {
   const SongLyricsView({super.key});
@@ -28,8 +28,17 @@ class _SongLyricsViewState extends State<SongLyricsView> {
   Future<LyricsInfoModel?> getLyrics(BuildContext context) async {
     var lyricsInfoModel = context.getArgument<LyricsInfoModel>();
     if (lyricsInfoModel != null) {
-      var lyrics = await _apiProvider.getLyrics(url: lyricsInfoModel.url);
-      lyricsInfoModel.lyrics = lyrics;
+      var songList = await _apiProvider.getSongsByLyrics(
+          text: "${lyricsInfoModel.singer} ${lyricsInfoModel.song}");
+      if (songList.isNotEmpty) {
+        var thatSong = songList.where((element) =>
+            element.artistName == lyricsInfoModel.singer &&
+            element.songName == lyricsInfoModel.song);
+        if (thatSong.isNotEmpty) {
+          var lyrics = await _apiProvider.getLyrics(thatSong.first.url);
+          lyricsInfoModel.lyrics = lyrics;
+        }
+      }
     }
     return lyricsInfoModel;
   }
@@ -52,7 +61,7 @@ class _SongLyricsViewState extends State<SongLyricsView> {
                   child: SingleChildScrollView(
                     child: Html(
                       data:
-                          "<b>${snapshot.data!.singer} - ${snapshot.data!.song}</b><br><br>${snapshot.data!.lyrics?.replaceAll("<a", "<p")}",
+                          "<b>${snapshot.data!.singer} - ${snapshot.data!.song}</b><br><br>${snapshot.data!.lyrics == null ? "couldn't find lyrics :(" : snapshot.data!.lyrics?.replaceAll("<a", "<p")}",
                     ),
                   ),
                 );

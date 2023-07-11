@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:html/parser.dart';
-import 'package:songlyrics/models/song.dart';
+import 'package:songlyrics/models/genius/geniussong.dart';
+import 'package:songlyrics/services/song/abstract/lyrics_provider.dart';
 import 'package:songlyrics/services/song/abstract/song_provider.dart';
 import 'package:http/http.dart' as http;
 import '../../../helpers/api_urls.dart';
+import '../../../models/song.dart';
 
-class GeniusService implements SongProvider {
+class GeniusService implements SongProvider, LyricsProvider {
   @override
   Future<Iterable<Song>> getSongsByLyrics({required String text}) async {
     final response =
@@ -17,13 +19,18 @@ class GeniusService implements SongProvider {
 
     var body = jsonDecode(response.body);
     var hits = body["response"]["hits"];
-    var songList = hits.map<Song>((json) => Song.fromJson(json)).toList();
-    return songList;
+    var songList =
+        hits.map<GeniusSong>((json) => GeniusSong.fromJson(json)).toList();
+    var g = songList
+        .map<Song>((el) =>
+            Song(el.result.title, el.result.artistName, el.result.songUrl))
+        .toList();
+    return g;
   }
 
   @override
-  Future<String> getLyrics({required String url}) async {
-    final response = await http.get(Uri.parse(url));
+  Future<String> getLyrics(String? url) async {
+    final response = await http.get(Uri.parse(url!));
     var document = parse(response.body);
     var lyrics = document
         .getElementsByTagName("div")
