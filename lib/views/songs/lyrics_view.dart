@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
 
@@ -61,7 +62,7 @@ class _SongLyricsViewState extends State<SongLyricsView> {
                   child: SingleChildScrollView(
                     child: Html(
                       data:
-                          "<b>${snapshot.data!.singer} - ${snapshot.data!.song}</b><br><br>${snapshot.data!.lyrics == null ? "couldn't find lyrics :(" : snapshot.data!.lyrics?.replaceAll("<a", "<p")}",
+                          "<b>${snapshot.data!.singer} - ${snapshot.data!.song}</b><br><br>${snapshot.data!.lyrics == null ? context.loc.couldnt_find_lyrics : snapshot.data!.lyrics?.replaceAll("<a", "<p")}",
                     ),
                   ),
                 );

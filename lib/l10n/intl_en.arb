@@ -25,5 +25,6 @@
     "song_find":"Let's find song!",
     "input_search_text":"Part of the song...",
     "find_button_text":"Find",
-    "waiting_text":"Please wait a moment"
+    "waiting_text":"Please wait a moment",
+    "couldnt_find_lyrics":"couldn't find lyrics :/"
 }

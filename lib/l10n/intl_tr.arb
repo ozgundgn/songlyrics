@@ -25,5 +25,6 @@
     "song_find":"Şarkı bulalım!",
     "input_search_text":"Şarkının bir kısmı...",
     "find_button_text":"Bul",
-    "waiting_text":"Lüften biraz bekleyin"
+    "waiting_text":"Lüften biraz bekleyin",
+    "couldnt_find_lyrics":"şarkı sözü bulunamadı :/"
 }
