@@ -1,3 +1,4 @@
+import 'package:change_case/change_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:songlyrics/extensions/buildcontext/loc.dart';
@@ -5,6 +6,7 @@ import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
 
 import '../../models/genius/geniussong.dart';
+import '../../services/song/sarkizsozlerihd/sarki_sozlerihd_service.dart';
 
 class SongLyricsView extends StatefulWidget {
   const SongLyricsView({super.key});
@@ -14,10 +16,10 @@ class SongLyricsView extends StatefulWidget {
 }
 
 class _SongLyricsViewState extends State<SongLyricsView> {
-  late GeniusService _apiProvider;
+  late SarkiSozleriHdService _apiProvider;
   @override
   void initState() {
-    _apiProvider = GeniusService();
+    _apiProvider = SarkiSozleriHdService();
     super.initState();
   }
 
@@ -29,17 +31,38 @@ class _SongLyricsViewState extends State<SongLyricsView> {
   Future<LyricsInfoModel?> getLyrics(BuildContext context) async {
     var lyricsInfoModel = context.getArgument<LyricsInfoModel>();
     if (lyricsInfoModel != null) {
-      var songList = await _apiProvider.getSongsByLyrics(
-          text: "${lyricsInfoModel.singer} ${lyricsInfoModel.song}");
-      if (songList.isNotEmpty) {
-        var thatSong = songList.where((element) =>
-            element.artistName == lyricsInfoModel.singer &&
-            element.songName == lyricsInfoModel.song);
-        if (thatSong.isNotEmpty) {
-          var lyrics = await _apiProvider.getLyrics(thatSong.first.url);
-          lyricsInfoModel.lyrics = lyrics;
-        }
-      }
+      // var songList = await _apiProvider.getSongsByLyrics(
+      //     text: "${lyricsInfoModel.singer} ${lyricsInfoModel.song}");
+      // if (songList.isNotEmpty) {
+      // var thatSong = songList.where((element) =>
+      //     element.artistName == lyricsInfoModel.singer &&
+      //     element.songName == lyricsInfoModel.song);
+      // if (thatSong.isNotEmpty) {
+      //   var lyrics =
+      //     await _apiProvider.getLyrics("$singerName $songName".toParamCase());
+      // lyricsInfoModel.lyrics = lyrics;
+      // }
+      String songName = lyricsInfoModel.song
+          .toLowerCase()
+          .replaceAll('ç', 'c')
+          .replaceAll('ğ', 'g')
+          .replaceAll('ş', 's')
+          .replaceAll('ü', 'u')
+          .replaceAll('ö', 'o')
+          .replaceAll('ı', 'i');
+
+      String singerName = lyricsInfoModel.singer
+          .toLowerCase()
+          .replaceAll('ç', 'c')
+          .replaceAll('ğ', 'g')
+          .replaceAll('ş', 's')
+          .replaceAll('ü', 'u')
+          .replaceAll('ö', 'o')
+          .replaceAll('ı', 'i');
+      var lyrics =
+          await _apiProvider.getLyrics("$singerName $songName".toParamCase());
+      lyricsInfoModel.lyrics = lyrics;
+      // }
     }
     return lyricsInfoModel;
   }
