@@ -16,10 +16,12 @@ class SongLyricsView extends StatefulWidget {
 }
 
 class _SongLyricsViewState extends State<SongLyricsView> {
-  late SarkiSozleriHdService _apiProvider;
+  late GeniusService _apiGeniusService;
+  late SarkiSozleriHdService _apiSarkiSozleriService;
   @override
   void initState() {
-    _apiProvider = SarkiSozleriHdService();
+    _apiSarkiSozleriService = SarkiSozleriHdService();
+    _apiGeniusService = GeniusService();
     super.initState();
   }
 
@@ -31,38 +33,25 @@ class _SongLyricsViewState extends State<SongLyricsView> {
   Future<LyricsInfoModel?> getLyrics(BuildContext context) async {
     var lyricsInfoModel = context.getArgument<LyricsInfoModel>();
     if (lyricsInfoModel != null) {
-      // var songList = await _apiProvider.getSongsByLyrics(
-      //     text: "${lyricsInfoModel.singer} ${lyricsInfoModel.song}");
-      // if (songList.isNotEmpty) {
-      // var thatSong = songList.where((element) =>
-      //     element.artistName == lyricsInfoModel.singer &&
-      //     element.songName == lyricsInfoModel.song);
-      // if (thatSong.isNotEmpty) {
-      //   var lyrics =
-      //     await _apiProvider.getLyrics("$singerName $songName".toParamCase());
-      // lyricsInfoModel.lyrics = lyrics;
-      // }
-      String songName = lyricsInfoModel.song
-          .toLowerCase()
-          .replaceAll('ç', 'c')
-          .replaceAll('ğ', 'g')
-          .replaceAll('ş', 's')
-          .replaceAll('ü', 'u')
-          .replaceAll('ö', 'o')
-          .replaceAll('ı', 'i');
-
-      String singerName = lyricsInfoModel.singer
-          .toLowerCase()
-          .replaceAll('ç', 'c')
-          .replaceAll('ğ', 'g')
-          .replaceAll('ş', 's')
-          .replaceAll('ü', 'u')
-          .replaceAll('ö', 'o')
-          .replaceAll('ı', 'i');
-      var lyrics =
-          await _apiProvider.getLyrics("$singerName $songName".toParamCase());
-      lyricsInfoModel.lyrics = lyrics;
-      // }
+      var songList = await _apiGeniusService.getSongsByLyrics(
+          text: "${lyricsInfoModel.singer} ${lyricsInfoModel.song}");
+      if (songList.isNotEmpty) {
+        var searchSong = replaceTurkishChar(lyricsInfoModel.song);
+        var searchSinger = replaceTurkishChar(lyricsInfoModel.singer);
+        var thatSong = songList.where((element) =>
+            replaceTurkishChar(element.artistName) == searchSinger &&
+            replaceTurkishChar(element.songName) == searchSong);
+        if (thatSong.isNotEmpty) {
+          var lyrics = await _apiGeniusService.getLyrics(thatSong.first.url);
+          lyricsInfoModel.lyrics = lyrics;
+        } else {
+          var lyrics = await sarkiSozuHdPart(lyricsInfoModel);
+          lyricsInfoModel.lyrics = lyrics;
+        }
+      } else {
+        var lyrics = await sarkiSozuHdPart(lyricsInfoModel);
+        lyricsInfoModel.lyrics = lyrics;
+      }
     }
     return lyricsInfoModel;
   }
@@ -85,7 +74,7 @@ class _SongLyricsViewState extends State<SongLyricsView> {
                   child: SingleChildScrollView(
                     child: Html(
                       data:
-                          "<b>${snapshot.data!.singer} - ${snapshot.data!.song}</b><br><br>${snapshot.data!.lyrics == null ? context.loc.couldnt_find_lyrics : snapshot.data!.lyrics?.replaceAll("<a", "<p")}",
+                          "<b>${snapshot.data!.singer} - ${snapshot.data!.song}</b><br><br>${snapshot.data!.lyrics!.isEmpty ? context.loc.couldnt_find_lyrics : snapshot.data!.lyrics?.replaceAll("<a", "<p")}",
                     ),
                   ),
                 );
@@ -96,5 +85,24 @@ class _SongLyricsViewState extends State<SongLyricsView> {
         },
       ),
     );
+  }
+
+  Future<String> sarkiSozuHdPart(LyricsInfoModel lyricsInfoModel) async {
+    String songName = replaceTurkishChar(lyricsInfoModel.song);
+    String singerName = replaceTurkishChar(lyricsInfoModel.singer);
+    String lyrics = await _apiSarkiSozleriService
+        .getLyrics("$singerName $songName".toParamCase());
+    return lyrics;
+  }
+
+  String replaceTurkishChar(String word) {
+    return word
+        .toLowerCase()
+        .replaceAll('ç', 'c')
+        .replaceAll('ğ', 'g')
+        .replaceAll('ş', 's')
+        .replaceAll('ü', 'u')
+        .replaceAll('ö', 'o')
+        .replaceAll('ı', 'i');
   }
 }
