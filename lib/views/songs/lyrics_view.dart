@@ -4,7 +4,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
-
 import '../../models/genius/geniussong.dart';
 import '../../services/song/sarkizsozlerihd/sarki_sozlerihd_service.dart';
 
@@ -39,8 +38,8 @@ class _SongLyricsViewState extends State<SongLyricsView> {
         var searchSong = replaceTurkishChar(lyricsInfoModel.song);
         var searchSinger = replaceTurkishChar(lyricsInfoModel.singer);
         var thatSong = songList.where((element) =>
-            replaceTurkishChar(element.artistName) == searchSinger &&
-            replaceTurkishChar(element.songName) == searchSong);
+            replaceTurkishChar(element.artistName).contains(searchSinger) &&
+            replaceTurkishChar(element.songName).contains(searchSong));
         if (thatSong.isNotEmpty) {
           var lyrics = await _apiGeniusService.getLyrics(thatSong.first.url);
           lyricsInfoModel.lyrics = lyrics;
