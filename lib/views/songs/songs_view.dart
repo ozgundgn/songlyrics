@@ -5,6 +5,7 @@ import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/views/songs/songs_list_view.dart';
 import '../../models/genius/geniussong.dart';
 import '../../models/song.dart';
+import '../../services/ads/google_ads.dart';
 import '../../services/song/bloc/song_bloc.dart';
 import '../../services/song/bloc/song_event.dart';
 import '../../services/song/bloc/song_state.dart';
@@ -22,6 +23,15 @@ class SongsView extends StatefulWidget {
 
 class _SongsViewState extends State<SongsView> {
   Iterable<Song>? _songList;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   // Future<Iterable<Song>> getText(BuildContext context) async {
   //   var text = context.getArgument<String>();
@@ -40,10 +50,9 @@ class _SongsViewState extends State<SongsView> {
         return Scaffold(
             appBar: AppBar(
               title: Text(context.loc.songs_title(_songList?.length ?? 0)),
-              leading: BackButton(
-                onPressed: () =>
-                    context.read<SongBloc>().add(const SongEventInitialize()),
-              ),
+              leading: BackButton(onPressed: () {
+                context.read<SongBloc>().add(const SongEventInitialize());
+              }),
             ),
             body: SongsListView(
               songs: _songList!,

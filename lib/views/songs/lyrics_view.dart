@@ -5,6 +5,7 @@ import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
 import '../../models/genius/geniussong.dart';
+import '../../services/ads/google_ads.dart';
 import '../../services/song/sarkizsozlerihd/sarki_sozlerihd_service.dart';
 
 class SongLyricsView extends StatefulWidget {
@@ -17,10 +18,17 @@ class SongLyricsView extends StatefulWidget {
 class _SongLyricsViewState extends State<SongLyricsView> {
   late GeniusService _apiGeniusService;
   late SarkiSozleriHdService _apiSarkiSozleriService;
+  GoogleAds googleAds = GoogleAds();
   @override
   void initState() {
     _apiSarkiSozleriService = SarkiSozleriHdService();
     _apiGeniusService = GeniusService();
+    googleAds.loadAdInterstitial(showAfterLoad: true);
+    googleAds.loadAdBanner(
+      adLoaded: () {
+        setState(() {});
+      },
+    );
     super.initState();
   }
 
@@ -30,6 +38,8 @@ class _SongLyricsViewState extends State<SongLyricsView> {
   }
 
   Future<LyricsInfoModel?> getLyrics(BuildContext context) async {
+    googleAds.showInterstitialAd();
+
     var lyricsInfoModel = context.getArgument<LyricsInfoModel>();
     if (lyricsInfoModel != null) {
       var songList = await _apiGeniusService.getSongsByLyrics(

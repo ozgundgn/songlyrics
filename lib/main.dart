@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/helpers/loading/loading_screen.dart';
 import 'package:songlyrics/services/song/bloc/song_bloc.dart';
@@ -15,6 +16,8 @@ import 'constants/routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+
   runApp(
     BlocProvider(
       create: (context) => SongBloc(
@@ -39,7 +42,7 @@ void main() {
 
         routes: {
           searchView: ((context) => const SearchView()),
-          songsView: (context) => const SongsView(),
+          songsView: (context) => SongsView(),
           songLyricsView: (context) => const SongLyricsView()
         },
       ),
@@ -78,7 +81,7 @@ class _HomePageState extends State<HomePage> {
       },
       builder: (context, state) {
         if (state is SongStateFound) {
-          return const SongsView();
+          return SongsView();
         } else {
           return const SearchView();
         }
