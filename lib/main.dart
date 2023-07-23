@@ -42,7 +42,7 @@ void main() {
 
         routes: {
           searchView: ((context) => const SearchView()),
-          songsView: (context) => SongsView(),
+          songsView: (context) => const SongsView(),
           songLyricsView: (context) => const SongLyricsView()
         },
       ),
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
       },
       builder: (context, state) {
         if (state is SongStateFound) {
-          return SongsView();
+          return const SongsView();
         } else {
           return const SearchView();
         }

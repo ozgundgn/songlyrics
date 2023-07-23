@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:songlyrics/constants/routes.dart';
 import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/views/songs/songs_list_view.dart';
@@ -23,13 +24,22 @@ class SongsView extends StatefulWidget {
 
 class _SongsViewState extends State<SongsView> {
   Iterable<Song>? _songList;
+  GoogleAds googleAds = GoogleAds();
   @override
   void initState() {
     super.initState();
+    googleAds.loadAdInterstitial();
+    googleAds.loadAdBanner(
+      adLoaded: () {
+        setState(() {});
+      },
+    );
   }
 
   @override
   void dispose() {
+    googleAds.bannerDispose();
+    googleAds.interDispose();
     super.dispose();
   }
 
@@ -54,16 +64,30 @@ class _SongsViewState extends State<SongsView> {
                 context.read<SongBloc>().add(const SongEventInitialize());
               }),
             ),
-            body: SongsListView(
-              songs: _songList!,
-              onTap: (song) async {
-                Navigator.of(context).pushNamed(songLyricsView,
-                    arguments:
-                        LyricsInfoModel(song.artistName, song.songName, null));
-                // context.read<SongBloc>().add(
-                //       SongEventLyricsSearching(song.result.songUrl),
-                //     );
-              },
+            body: Column(
+              children: [
+                Expanded(
+                  child: SongsListView(
+                    songs: _songList!,
+                    onTap: (song) async {
+                      googleAds.showInterstitialAd();
+                      Navigator.of(context).pushNamed(songLyricsView,
+                          arguments: LyricsInfoModel(
+                              song.artistName, song.songName, null));
+                      // context.read<SongBloc>().add(
+                      //       SongEventLyricsSearching(song.result.songUrl),
+                      //     );
+                    },
+                  ),
+                ),
+                if (googleAds.bannerAd != null)
+                  Container(
+                    color: Colors.white,
+                    width: 468,
+                    height: 60,
+                    child: AdWidget(ad: googleAds.bannerAd!),
+                  ),
+              ],
             ));
       },
     );

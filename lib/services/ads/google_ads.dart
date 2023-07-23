@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-
 import '../../constants/ads.dart';
 
 class GoogleAds {
-  BannerAd? _bannerAd;
-  late InterstitialAd? _interstitialAd;
+  BannerAd? bannerAd;
+  InterstitialAd? interstitialAd;
 
   /// Loads an interstitial ad.
   void loadAdInterstitial({bool showAfterLoad = false}) {
@@ -15,7 +14,7 @@ class GoogleAds {
         adLoadCallback: InterstitialAdLoadCallback(
           // Called when an ad is successfully received.
           onAdLoaded: (ad) {
-            _interstitialAd = ad;
+            interstitialAd = ad;
             if (showAfterLoad) {
               showInterstitialAd();
             }
@@ -26,20 +25,20 @@ class GoogleAds {
   }
 
   void showInterstitialAd() {
-    if (_interstitialAd != null) {
-      _interstitialAd!.show();
+    if (interstitialAd != null) {
+      interstitialAd!.show();
     }
   }
 
   void loadAdBanner({required VoidCallback adLoaded}) {
-    _bannerAd = BannerAd(
+    bannerAd = BannerAd(
       adUnitId: AdKeys.bannerAd1,
       request: const AdRequest(),
-      size: AdSize.banner, //küçük bir reklam istersek bu boyutta
+      size: AdSize.fullBanner, //küçük bir reklam istersek bu boyutta
       listener: BannerAdListener(
         // Called when an ad is successfully received.
         onAdLoaded: (ad) {
-          _bannerAd = ad as BannerAd;
+          bannerAd = ad as BannerAd;
           adLoaded();
         },
         // Called when an ad request failed.
@@ -48,5 +47,17 @@ class GoogleAds {
         },
       ),
     )..load();
+  }
+
+  void bannerDispose() {
+    if (bannerAd != null) {
+      bannerAd!.dispose();
+    }
+  }
+
+  void interDispose() {
+    if (interstitialAd != null) {
+      interstitialAd!.dispose();
+    }
   }
 }

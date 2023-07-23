@@ -19,11 +19,12 @@ class _SongLyricsViewState extends State<SongLyricsView> {
   late GeniusService _apiGeniusService;
   late SarkiSozleriHdService _apiSarkiSozleriService;
   GoogleAds googleAds = GoogleAds();
+
   @override
   void initState() {
     _apiSarkiSozleriService = SarkiSozleriHdService();
     _apiGeniusService = GeniusService();
-    googleAds.loadAdInterstitial(showAfterLoad: true);
+    googleAds.loadAdInterstitial(showAfterLoad: false);
     googleAds.loadAdBanner(
       adLoaded: () {
         setState(() {});
@@ -38,8 +39,6 @@ class _SongLyricsViewState extends State<SongLyricsView> {
   }
 
   Future<LyricsInfoModel?> getLyrics(BuildContext context) async {
-    googleAds.showInterstitialAd();
-
     var lyricsInfoModel = context.getArgument<LyricsInfoModel>();
     if (lyricsInfoModel != null) {
       var songList = await _apiGeniusService.getSongsByLyrics(

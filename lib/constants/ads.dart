@@ -1,5 +1,4 @@
 class AdKeys {
-  static const String interstitialAd1 =
-      "ca-app-pub-3940256099942544/1033173712";
-  static const String bannerAd1 = "ca-app-pub-3940256099942544/6300978111";
+  static String interstitialAd1 = "ca-app-pub-2916475751442108/9412009759";
+  static String bannerAd1 = "ca-app-pub-2916475751442108/3283136552";
 }
