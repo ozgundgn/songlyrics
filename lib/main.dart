@@ -13,41 +13,49 @@ import 'package:songlyrics/views/songs/search.dart';
 import 'package:songlyrics/views/songs/songs_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'constants/routes.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
 
-  runApp(
-    BlocProvider(
-      create: (context) => SongBloc(
-        SpotifyService(),
-        GeniusService(),
-      ),
-      child: MaterialApp(
-        //dil eklenecek
-        onGenerateTitle: (context) => context.loc.my_title,
-        // title: 'Sofly',
-        localizationsDelegates: AppLocalizations
-            .localizationsDelegates, //(dil desteği için)yukarda verdiğimiz yolda zaten konumlar tanımlı old. için kendimiz bir liste üretmemeliyiz.,
-        supportedLocales: AppLocalizations.supportedLocales,
-        theme: ThemeData(
-          // textTheme: GoogleFonts.montserratTextTheme().copyWith(
-          //   bodyMedium: GoogleFonts.oswald(),
-          // ),
-          primarySwatch: Colors.purple,
-        ),
-        themeMode: ThemeMode.dark,
-        home: const HomePage(title: 'Sofly'),
+  SentryFlutter.init((options) {
+    options.dsn =
+        'https://5f3964766161b9a9028b72b235d1f843@o4505614729412608.ingest.sentry.io/4505614744748032';
+    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+    // We recommend adjusting this value in production.
+    options.tracesSampleRate = 1.0;
+  },
+      appRunner: () => runApp(
+            BlocProvider(
+              create: (context) => SongBloc(
+                SpotifyService(),
+                GeniusService(),
+              ),
+              child: MaterialApp(
+                //dil eklenecek
+                onGenerateTitle: (context) => context.loc.my_title,
+                // title: 'Sofly',
+                localizationsDelegates: AppLocalizations
+                    .localizationsDelegates, //(dil desteği için)yukarda verdiğimiz yolda zaten konumlar tanımlı old. için kendimiz bir liste üretmemeliyiz.,
+                supportedLocales: AppLocalizations.supportedLocales,
+                theme: ThemeData(
+                  // textTheme: GoogleFonts.montserratTextTheme().copyWith(
+                  //   bodyMedium: GoogleFonts.oswald(),
+                  // ),
+                  primarySwatch: Colors.purple,
+                ),
+                themeMode: ThemeMode.dark,
+                home: const HomePage(title: 'Sofly'),
 
-        routes: {
-          searchView: ((context) => const SearchView()),
-          songsView: (context) => const SongsView(),
-          songLyricsView: (context) => const SongLyricsView()
-        },
-      ),
-    ),
-  );
+                routes: {
+                  searchView: ((context) => const SearchView()),
+                  songsView: (context) => const SongsView(),
+                  songLyricsView: (context) => const SongLyricsView()
+                },
+              ),
+            ),
+          ));
 }
 
 class HomePage extends StatefulWidget {

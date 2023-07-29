@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:songlyrics/models/genius/geniussong.dart';
 import 'package:songlyrics/services/song/abstract/lyrics_provider.dart';
 import 'package:songlyrics/services/song/abstract/song_provider.dart';
@@ -32,7 +33,12 @@ class GeniusService implements SongProvider, LyricsProvider {
   @override
   Future<String> getLyrics(String? url) async {
     final response = await http.get(Uri.parse(url!));
+    await Sentry.captureMessage(
+        "Url will be parsed in getlyrics metohod in genius service",
+        level: SentryLevel.info);
     var document = await compute(parse, response.body);
+    await Sentry.captureMessage("Parsed url response from genius service",
+        level: SentryLevel.info);
     var lyrics = document
         .getElementsByTagName("div")
         .where((el) => el.attributes["data-lyrics-container"] == "true")

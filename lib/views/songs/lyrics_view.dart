@@ -1,6 +1,7 @@
 import 'package:change_case/change_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
@@ -49,8 +50,15 @@ class _SongLyricsViewState extends State<SongLyricsView> {
         var thatSong = songList.where((element) =>
             replaceTurkishChar(element.artistName).contains(searchSinger) &&
             replaceTurkishChar(element.songName).contains(searchSong));
+
         if (thatSong.isNotEmpty) {
+          await Sentry.captureMessage(
+              "Song found and started get lyrics from genius service",
+              level: SentryLevel.info);
           var lyrics = await _apiGeniusService.getLyrics(thatSong.first.url);
+          await Sentry.captureMessage("Got lyrics from genius service",
+              level: SentryLevel.info);
+
           lyricsInfoModel.lyrics = lyrics;
         } else {
           var lyrics = await sarkiSozuHdPart(lyricsInfoModel);
