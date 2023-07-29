@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart';
 import 'package:songlyrics/models/genius/geniussong.dart';
 import 'package:songlyrics/services/song/abstract/lyrics_provider.dart';
@@ -31,7 +32,7 @@ class GeniusService implements SongProvider, LyricsProvider {
   @override
   Future<String> getLyrics(String? url) async {
     final response = await http.get(Uri.parse(url!));
-    var document = parse(response.body);
+    var document = await compute(parse, response.body);
     var lyrics = document
         .getElementsByTagName("div")
         .where((el) => el.attributes["data-lyrics-container"] == "true")
