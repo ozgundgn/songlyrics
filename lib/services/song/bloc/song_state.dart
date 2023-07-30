@@ -27,7 +27,7 @@ class SongStateSearching extends SongState {
 
 class SongStateFound extends SongState {
   final Exception? exception;
-  final Iterable<Song>? list;
+  final Iterable<CustomSong>? list;
   const SongStateFound(
       {required this.list, required this.exception, required super.isLoading});
 }

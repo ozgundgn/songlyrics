@@ -23,7 +23,7 @@ class SongsView extends StatefulWidget {
 }
 
 class _SongsViewState extends State<SongsView> {
-  Iterable<Song>? _songList;
+  Iterable<CustomSong>? _songList;
   GoogleAds googleAds = GoogleAds();
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _SongsViewState extends State<SongsView> {
                       googleAds.showInterstitialAd();
                       Navigator.of(context).pushNamed(songLyricsView,
                           arguments: LyricsInfoModel(
-                              song.artistName, song.songName, null));
+                              song.artistName, song.songName, null, null));
                       // context.read<SongBloc>().add(
                       //       SongEventLyricsSearching(song.result.songUrl),
                       //     );

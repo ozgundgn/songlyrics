@@ -50,6 +50,7 @@ dependencies:
   change_case: ^1.1.0
   google_mobile_ads: ^3.0.0
   sentry_flutter: ^7.9.0
+  genius_lyrics: ^0.0.9
 
 dev_dependencies:
   flutter_test:

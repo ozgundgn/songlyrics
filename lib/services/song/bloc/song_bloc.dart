@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:songlyrics/models/genius/geniussong.dart';
 import 'package:songlyrics/services/song/bloc/song_event.dart';
 import 'package:songlyrics/services/song/bloc/song_state.dart';
 import '../../../models/song.dart';
@@ -22,7 +23,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
         emit(const SongStateSearching(exception: null, isLoading: false));
       }
       Exception? exception;
-      Iterable<Song>? list;
+      Iterable<CustomSong>? list;
       try {
         list = await songProvider.getSongsByLyrics(text: text!);
         exception = null;
@@ -50,9 +51,10 @@ class SongBloc extends Bloc<SongEvent, SongState> {
           return;
         }
         Exception? exception;
-        String lyrics = "";
+        String? lyrics = "";
         try {
-          lyrics = await lyricsProvider.getLyrics(songUrl);
+          LyricsInfoModel model = LyricsInfoModel(null, null, null, songUrl);
+          lyrics = await lyricsProvider.getLyrics(model);
           exception = null;
         } on Exception catch (e) {
           exception = e;

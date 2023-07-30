@@ -43,8 +43,9 @@ class SongDetail {
 }
 
 class LyricsInfoModel {
-  final String singer;
-  final String song;
+  String? singer;
+  String? song;
   String? lyrics;
-  LyricsInfoModel(this.singer, this.song, this.lyrics);
+  String? url;
+  LyricsInfoModel(this.singer, this.song, this.lyrics, this.url);
 }

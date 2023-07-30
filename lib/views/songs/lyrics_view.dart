@@ -1,7 +1,6 @@
 import 'package:change_case/change_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:songlyrics/extensions/buildcontext/loc.dart';
 import 'package:songlyrics/services/song/genius/genius_service.dart';
 import 'package:songlyrics/utilities/get_arguments.dart';
@@ -17,14 +16,14 @@ class SongLyricsView extends StatefulWidget {
 }
 
 class _SongLyricsViewState extends State<SongLyricsView> {
-  late GeniusService _apiGeniusService;
   late SarkiSozleriHdService _apiSarkiSozleriService;
+  late GeniusService _geniusService;
   GoogleAds googleAds = GoogleAds();
 
   @override
   void initState() {
+    _geniusService = GeniusService();
     _apiSarkiSozleriService = SarkiSozleriHdService();
-    _apiGeniusService = GeniusService();
     googleAds.loadAdInterstitial(showAfterLoad: false);
     googleAds.loadAdBanner(
       adLoaded: () {
@@ -41,29 +40,11 @@ class _SongLyricsViewState extends State<SongLyricsView> {
 
   Future<LyricsInfoModel?> getLyrics(BuildContext context) async {
     var lyricsInfoModel = context.getArgument<LyricsInfoModel>();
+
     if (lyricsInfoModel != null) {
-      var songList = await _apiGeniusService.getSongsByLyrics(
-          text: "${lyricsInfoModel.singer} ${lyricsInfoModel.song}");
-      if (songList.isNotEmpty) {
-        var searchSong = replaceTurkishChar(lyricsInfoModel.song);
-        var searchSinger = replaceTurkishChar(lyricsInfoModel.singer);
-        var thatSong = songList.where((element) =>
-            replaceTurkishChar(element.artistName).contains(searchSinger) &&
-            replaceTurkishChar(element.songName).contains(searchSong));
-
-        if (thatSong.isNotEmpty) {
-          await Sentry.captureMessage(
-              "Song found and started get lyrics from genius service",
-              level: SentryLevel.info);
-          var lyrics = await _apiGeniusService.getLyrics(thatSong.first.url);
-          await Sentry.captureMessage("Got lyrics from genius service",
-              level: SentryLevel.info);
-
-          lyricsInfoModel.lyrics = lyrics;
-        } else {
-          var lyrics = await sarkiSozuHdPart(lyricsInfoModel);
-          lyricsInfoModel.lyrics = lyrics;
-        }
+      String? lyrics = await _geniusService.getLyrics(lyricsInfoModel);
+      if (lyrics != null && lyrics.isNotEmpty) {
+        lyricsInfoModel.lyrics = lyrics;
       } else {
         var lyrics = await sarkiSozuHdPart(lyricsInfoModel);
         lyricsInfoModel.lyrics = lyrics;
@@ -86,14 +67,34 @@ class _SongLyricsViewState extends State<SongLyricsView> {
             case ConnectionState.active:
             case ConnectionState.done:
               if (snapshot.hasData) {
-                return Center(
-                  child: SingleChildScrollView(
-                    child: Html(
-                      data:
-                          "<b>${snapshot.data!.singer} - ${snapshot.data!.song}</b><br><br>${snapshot.data!.lyrics!.isEmpty ? context.loc.couldnt_find_lyrics : snapshot.data!.lyrics?.replaceAll("<a", "<p")}",
-                    ),
-                  ),
-                );
+                if (snapshot.data != null) {
+                  if (snapshot.data!.lyrics!.contains("<")) {
+                    return Center(
+                      child: SingleChildScrollView(
+                        child: Html(
+                          data:
+                              "<b>${snapshot.data!.singer} - ${snapshot.data!.song}</b><br><br>${snapshot.data!.lyrics!.isEmpty ? context.loc.couldnt_find_lyrics : snapshot.data!.lyrics?.replaceAll("<a", "<p")}",
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView(children: [
+                      Center(
+                        child: Text(
+                          "${snapshot.data!.singer} - ${snapshot.data!.song}",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Center(
+                        child: SingleChildScrollView(
+                          child: Text(snapshot.data!.lyrics!),
+                        ),
+                      ),
+                    ]);
+                  }
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
               } else {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -104,11 +105,12 @@ class _SongLyricsViewState extends State<SongLyricsView> {
   }
 
   Future<String> sarkiSozuHdPart(LyricsInfoModel lyricsInfoModel) async {
-    String songName = replaceTurkishChar(lyricsInfoModel.song);
-    String singerName = replaceTurkishChar(lyricsInfoModel.singer);
-    String lyrics = await _apiSarkiSozleriService
-        .getLyrics("$singerName $songName".toParamCase());
-    return lyrics;
+    String? songName = replaceTurkishChar(lyricsInfoModel.song!);
+    String? singerName = replaceTurkishChar(lyricsInfoModel.singer!);
+    String url = "$singerName $songName".toParamCase();
+    String? lyrics = await _apiSarkiSozleriService
+        .getLyrics(LyricsInfoModel(null, null, null, url));
+    return lyrics!;
   }
 
   String replaceTurkishChar(String word) {

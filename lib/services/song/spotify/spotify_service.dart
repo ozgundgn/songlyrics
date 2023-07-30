@@ -28,7 +28,7 @@ class SpotifyService implements SongProvider {
   }
 
   @override
-  Future<Iterable<Song>> getSongsByLyrics({required String text}) async {
+  Future<Iterable<CustomSong>> getSongsByLyrics({required String text}) async {
     if (_token != null) {
       if (DateTime.now().isAfter(_token!.expireDate)) {
         _token = await getToken();
@@ -51,7 +51,7 @@ class SpotifyService implements SongProvider {
         hits.map<SpotifySong>((json) => SpotifySong.fromJson(json)).toList();
 
     var g = songs
-        .map<Song>((el) => Song(el.songName, el.artistName, el.url))
+        .map<CustomSong>((el) => CustomSong(el.songName, el.artistName, el.url))
         .toList();
     return g;
   }

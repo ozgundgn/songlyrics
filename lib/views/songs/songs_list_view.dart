@@ -5,10 +5,10 @@ import '../../models/song.dart';
 import '../../services/song/bloc/song_bloc.dart';
 import '../../services/song/bloc/song_state.dart';
 
-typedef SongsCallback = void Function(Song song);
+typedef SongsCallback = void Function(CustomSong song);
 
 class SongsListView extends StatelessWidget {
-  final Iterable<Song> songs;
+  final Iterable<CustomSong> songs;
   final SongsCallback onTap;
   const SongsListView({super.key, required this.songs, required this.onTap});
 

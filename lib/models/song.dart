@@ -1,7 +1,7 @@
-class Song {
+class CustomSong {
   final String songName;
   final String artistName;
   final String? url;
 
-  Song(this.songName, this.artistName, this.url);
+  CustomSong(this.songName, this.artistName, this.url);
 }
